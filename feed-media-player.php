@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Feed Media Player
-Plugin URI: http://feed.fm/documentation
+Plugin URI: http://feed.fm/
 Description: Plugin that puts a persistant audio player on your wordpress site
 Version: 1.0
 Author: support@feed.fm
