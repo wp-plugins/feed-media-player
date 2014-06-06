@@ -22,6 +22,12 @@ add_action('admin_init', 'feed_media_player_admin_init');
 
 add_action('get_header', 'feed_media_player_header');
 
+// start capturing page header info after a 'get_header' call
+function feed_media_player_header($name) {
+  ob_start('feed_media_header_filter');
+}
+
+// stick our script right after the HEAD
 function feed_media_header_filter($buffer) {
   $options = get_option('feed_media_player_options');
 
@@ -36,15 +42,12 @@ function feed_media_header_filter($buffer) {
   return $buffer;
 }
 
-function feed_media_player_header($name) {
-  ob_start('feed_media_header_filter');
-}
-
-register_activation_hook(__FILE__, 'feed_media_player_activation_hook');
-
 function feed_media_player_header_output() {
   ob_end_flush();
 }
+
+
+register_activation_hook(__FILE__, 'feed_media_player_activation_hook');
 
 function feed_media_player_footer_output() {
   echo '<script>var _paq=_paq||[];!function(){if(window!==window.parent){var a=document.createElement("script"),b=document.getElementsByTagName("script")[0];_paq.push(["setTrackerUrl","https://feed.fm/api/v2/analytics"]),_paq.push(["setSiteId","' . $options['token'] . '"]),_paq.push(["trackPageView"]),a.type="text/javascript",a.defer=!0,a.async=!0,a.src="http://wrap.feed.fm/wrap/piwik.js",b.parentNode.insertBefore(a,b)}}();</script>';
@@ -59,10 +62,12 @@ function feed_media_player_activation_hook() {
   }
 }
 
+// register sub-menu of 'Settings' menu
 function feed_media_player_settings_menu() {
   add_options_page('Feed Media Player Configuration', 'Feed Media Player', 'manage_options', 'feed-media-player', 'feed_media_player_config_page');
 }
 
+// render our settings page
 function feed_media_player_config_page() { ?>
   <div id="feed_media_player-general" class="wrap">
     <h2>Feed Media Player - Settings</h2>
