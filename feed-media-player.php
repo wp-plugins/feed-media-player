@@ -85,7 +85,7 @@ function feed_media_player_admin_notices() {
     if ($options['first_run'] === true) { 
       ?>
         <div class='updated' style="overflow: hidden; _overflow: visible; zoom: 1;">
-            <img style="margin: 8px; float: left" src="http://feed.localdomain:8001/wrap/feed-logo.png?url=<?php echo urlencode(get_option('home')); ?>">
+            <img style="margin: 8px; float: left" src="http://wrap.feed.fm/wrap/feed-logo.png?url=<?php echo urlencode(get_option('home')); ?>">
             <div>
               <p>
                 Thanks for installing the Feed Media Player, which is live on your
@@ -130,7 +130,7 @@ function feed_media_player_config_page() { ?>
 
 <?php $options = get_option('feed_media_player_options'); if ($options['token'] === DEFAULT_FEED_TOKEN ) { ?>
 
-    <form id="feed-media-create-account-form" method="post" action="http://feed.localdomain/account" target="_blank">
+    <form id="feed-media-create-account-form" method="post" action="http://developer.feed.fm/account" target="_blank">
       <div id="poststuff">
         <div id="post-body" class="metabox-holder columns-2">
           <div id="post-body-content">
