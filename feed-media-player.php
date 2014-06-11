@@ -85,7 +85,7 @@ function feed_media_player_admin_notices() {
     if ($options['first_run'] === true) { 
       ?>
         <div class='updated' style="overflow: hidden; _overflow: visible; zoom: 1;">
-            <img style="margin: 8px; float: left" src="http://wrap.feed.fm/wrap/feed-logo.png?url=<?php echo urlencode(get_option('home')); ?>">
+            <img style="margin: 8px; float: left" src="http://wrap.feed.fm/wrap/logo.png?url=<?php echo urlencode(get_option('home')); ?>">
             <div>
               <p>
                 Thanks for installing the Feed Media Player, which is live on your
