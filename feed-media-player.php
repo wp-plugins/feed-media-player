@@ -2,7 +2,7 @@
 /*
 Plugin Name: Feed Media Player
 Plugin URI: http://feed.fm/
-Description: Plugin that puts a persistant audio player on your wordpress site
+Description: Enhance your WordPress site with popular music - from Beatles to Daft Punk - in minutes!
 Version: 1.1
 Author: support@feed.fm
 Author URI: http://feed.fm/
