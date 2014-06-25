@@ -25,6 +25,8 @@ Music is a powerful retention, engagement, and branding tool. With a Feed.fm acc
 to track session times, return visits, conversions, and more to better understand your audience. An A/B test
 environment is available to find the best music solution for your site.
 
+*note*: Due to licensing restrictions, Feed.fm can only stream music to listeners in the United States.
+
 == Installation ==
 
 1. Install the feed-media-player via the WordPress.org directory or by uploading the
