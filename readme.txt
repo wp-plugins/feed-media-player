@@ -1,4 +1,4 @@
-=== Feed Media Player ===
+=== Music Player by Feed.fm ===
 Contributors: elambrecht
 Tags: music, tunes, radio, stream, audio, feed, media, player
 Requires at least: 3.4.2
@@ -12,11 +12,11 @@ Enhance your WordPress site with popular music - from Beatles to Daft Punk - in 
 == Description ==
 
 Feed.fm (Music as a Service) provides a legal turn-key API to add popular music to websites, apps, and games 
-n order to drive engagement, retention, and revenues. With the Feed Media Player plugin, you can enhance your
+n order to drive engagement, retention, and revenues. With the Music Player plugin, you can enhance your
 Wordpress site with music from your own personal collection, or you can select from Feed.fm's wide array
 of expertly curated stations. 
 
-The Feed media player integrates seamlessly with Wordpress, and comes with a selection of skins to fit the look
+The Music Player plugin integrates seamlessly with Wordpress, and comes with a selection of skins to fit the look
 and feel of your site. The player wraps your website so that music keeps playing even as users navigate from
 page to page. Because some more recent browser features are used to make this work (history API, audio API)
 the player only appears on modern browsers.
@@ -29,7 +29,7 @@ environment is available to find the best music solution for your site.
 
 == Installation ==
 
-1. Install the feed-media-player via the WordPress.org directory or by uploading the
+1. Install the Music Player via the WordPress.org directory or by uploading the
    feed-media-player.zip to your server.
 1. The plugin will immediately add music to your site upon activation.
 1. Follow the instructions that come up after activating the plugin to create
@@ -73,4 +73,5 @@ No, the pages in your website look the same to search engines as they always hav
 
 = 1.0 =
 * First version published on wp.org!
-
+= 1.2 =
+* Rename plugin

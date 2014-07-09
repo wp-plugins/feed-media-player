@@ -1,9 +1,9 @@
 <?php
 /*
-Plugin Name: Feed Media Player
+Plugin Name: Music Player by Feed.fm
 Plugin URI: http://feed.fm/
 Description: Enhance your WordPress site with popular music - from Beatles to Daft Punk - in minutes!
-Version: 1.1
+Version: 1.2
 Author: support@feed.fm
 Author URI: http://feed.fm/
 
@@ -11,6 +11,7 @@ History:
   0.4 - add 'v=' parameter. Don't require 'base=' parameter to deal with WP security
   1.0 - update to inline javascript based on mobify
   1.1 - better installation instructions, better styling, and authentication verification
+  1.2 - rename from 'Feed Media Player' to 'Music Player by Feed.fm'
 */
 
 define("VERSION", "1.0");
@@ -88,12 +89,12 @@ function feed_media_player_admin_notices() {
             <img style="margin: 8px; float: left" src="http://wrap.feed.fm/wrap/logo.png?url=<?php echo urlencode(get_option('home')); ?>">
             <div>
               <p>
-                Thanks for installing the Feed Media Player, which is live on your
+                Thanks for installing the Music Player by Feed.fm, which is live on your
                 site right now! 
               </p>
               <p>
                 To change the player style and music, visit the 
-                <a href="options-general.php?page=feed-media-player">Feed Media Player</a> section of your Settings page.
+                <a href="options-general.php?page=feed-media-player">Music Player</a> section of your Settings page.
               </p>
             </div>
         </div>
@@ -108,7 +109,7 @@ function feed_media_player_admin_notices() {
 
 // register sub-menu of 'Settings' menu
 function feed_media_player_settings_menu() {
-  $hook = add_options_page('Feed Media Player Configuration', 'Feed Media Player', 'manage_options', 'feed-media-player', 'feed_media_player_config_page');
+  $hook = add_options_page('Music Player Configuration', 'Music Player', 'manage_options', 'feed-media-player', 'feed_media_player_config_page');
   add_action('admin_print_scripts-' . $hook, 'feed_media_player_print_scripts');
   add_action('admin_print_styles-' . $hook, 'feed_media_player_print_styles');
 }
@@ -126,7 +127,7 @@ function feed_media_player_print_styles() {
 function feed_media_player_config_page() { ?>
   <div id="feed_media_player-general" class="wrap">
     <div id="feed-media-icon" class="icon32"></div>
-    <h2>Feed Media Player Settings</h2>
+    <h2>Music Player Settings</h2>
 
 <?php $options = get_option('feed_media_player_options'); if ($options['token'] === DEFAULT_FEED_TOKEN ) { ?>
 
