@@ -75,3 +75,5 @@ No, the pages in your website look the same to search engines as they always hav
 * First version published on wp.org!
 = 1.2 =
 * Rename plugin
+= 1.3 =
+* Add name, phone fields to signup

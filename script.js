@@ -10,6 +10,12 @@ jQuery(function($) {
     },
     errorClass: 'form-invalid',
     rules: {
+      name: {
+        required: true,
+      },
+      phone: {
+        required: true
+      },
       email_address: {
         required: true,
         email: true
@@ -26,6 +32,12 @@ jQuery(function($) {
       }
     },
     messages: {
+      name: {
+        required: 'Please enter your name'
+      },
+      phone: {
+        required: 'Please enter your phone number'
+      },
       email_address: {
         required: 'Please enter an email address',
         email: 'Please enter a valid email address'

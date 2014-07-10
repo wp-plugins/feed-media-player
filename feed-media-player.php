@@ -3,7 +3,7 @@
 Plugin Name: Music Player by Feed.fm
 Plugin URI: http://feed.fm/
 Description: Enhance your WordPress site with popular music - from Beatles to Daft Punk - in minutes!
-Version: 1.2
+Version: 1.3
 Author: support@feed.fm
 Author URI: http://feed.fm/
 
@@ -12,6 +12,7 @@ History:
   1.0 - update to inline javascript based on mobify
   1.1 - better installation instructions, better styling, and authentication verification
   1.2 - rename from 'Feed Media Player' to 'Music Player by Feed.fm'
+  1.3 - require name and phone number with registration
 */
 
 define("VERSION", "1.0");
@@ -156,6 +157,18 @@ function feed_media_player_config_page() { ?>
 
                 <table class="form-table">
                   <tbody>
+                    <tr>
+                      <th scope="row">Name</th>
+                      <td>
+                        <input type="text" name="name" class="regular-text">
+                      </td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Phone Number</th>
+                      <td>
+                        <input type="text" name="phone" class="regular-text">
+                      </td>
+                    </tr>
                     <tr>
                       <th scope="row">Email address</th>
                       <td>
