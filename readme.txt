@@ -77,3 +77,5 @@ No, the pages in your website look the same to search engines as they always hav
 * Rename plugin
 = 1.3 =
 * Add name, phone fields to signup
+= 1.4 =
+* Default all connections to HTTPS
