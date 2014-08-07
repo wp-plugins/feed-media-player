@@ -3,7 +3,7 @@
 Plugin Name: Music Player by Feed.fm
 Plugin URI: http://feed.fm/
 Description: Enhance your WordPress site with popular music - from Beatles to Daft Punk - in minutes!
-Version: 1.4
+Version: 1.5
 Author: support@feed.fm
 Author URI: http://feed.fm/
 
@@ -14,9 +14,10 @@ History:
   1.2 - rename from 'Feed Media Player' to 'Music Player by Feed.fm'
   1.3 - require name and phone number with registration
   1.4 - SSL all the things!
+  1.5 - missing script tag
 */
 
-define("VERSION", "1.4");
+define("VERSION", "1.5");
 define("DEFAULT_FEED_TOKEN", "c2473cbba8254ac3f2918867d9c94e8f8cedd961");
 define("DEFAULT_FEED_SECRET", "7d56a58e7b62ff5a870120724260eac0bd347e3d");
 
@@ -39,7 +40,7 @@ function feed_media_header_filter($buffer) {
   $options = get_option('feed_media_player_options');
 
   // don't forget hidden option!
-  $script = '<script>!function(a,b,c,d){function e(a,c,d,e){var f=b.getElementsByTagName("script")[0];a.src=e,a.id=c,a.setAttribute("class",d),f.parentNode.insertBefore(a,f)}var f=a.Feed={};f.config=d;var g=/((; )|#|&|^)feedfm=(\d)/.exec(location.hash+"; "+b.cookie);if(g&&g[3]){if(!+g[3])return}else if(!c())return;b.write(\'<plaintext style="display:none">\'),setTimeout(function(){f.capturing=!0;var c=b.createElement("script"),h="feedfm",i=function(){var c=new Date;c.setTime(c.getTime()+3e5),b.cookie="feedfm=0; expires="+c.toGMTString()+"; path=/",a.location=a.location.href};c.onerror=i;var j=d.script||d.base+(g&&2==g[3]?"/test.js":"/pt.js");e(c,"feedfm-js",h,j)})}(window,document,function(){var a=/webkit|(firefox)[\/\s](\d+)|(opera)[\s\S]*version[\/\s](\d+)|(trident)[\/\s](\d+)/i.exec(navigator.userAgent);return a?a[1]&&+a[2]<21?!1:a[3]&&+a[4]<15?!1:a[5]&&+a[6]<11?!1:!0:!1},{base:"https://d3qmh30sjudxaa.cloudfront.net/wrap",token:"' . $options['token'] . '",secret:"' . $options['secret'] . '",v:"' . VERSION . '"});';
+  $script = '<script>!function(a,b,c,d){function e(a,c,d,e){var f=b.getElementsByTagName("script")[0];a.src=e,a.id=c,a.setAttribute("class",d),f.parentNode.insertBefore(a,f)}var f=a.Feed={};f.config=d;var g=/((; )|#|&|^)feedfm=(\d)/.exec(location.hash+"; "+b.cookie);if(g&&g[3]){if(!+g[3])return}else if(!c())return;b.write(\'<plaintext style="display:none">\'),setTimeout(function(){f.capturing=!0;var c=b.createElement("script"),h="feedfm",i=function(){var c=new Date;c.setTime(c.getTime()+3e5),b.cookie="feedfm=0; expires="+c.toGMTString()+"; path=/",a.location=a.location.href};c.onerror=i;var j=d.script||d.base+(g&&2==g[3]?"/test.js":"/pt.js");e(c,"feedfm-js",h,j)})}(window,document,function(){var a=/webkit|(firefox)[\/\s](\d+)|(opera)[\s\S]*version[\/\s](\d+)|(trident)[\/\s](\d+)/i.exec(navigator.userAgent);return a?a[1]&&+a[2]<21?!1:a[3]&&+a[4]<15?!1:a[5]&&+a[6]<11?!1:!0:!1},{base:"https://d3qmh30sjudxaa.cloudfront.net/wrap",token:"' . $options['token'] . '",secret:"' . $options['secret'] . '",v:"' . VERSION . '"});</script>';
 
   $buffer = preg_replace(
     '/<(head)([^>]*)>/i', 
