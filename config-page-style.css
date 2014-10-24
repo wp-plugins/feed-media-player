@@ -178,7 +178,7 @@ a:hover {
 	min-width: 100px;
 	border-radius: 3px;
 	font-size: 125%;
-  margin: 4px 4px;
+  margin: 4px 4px !important;
   display: inline-block;
 }
 
