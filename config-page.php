@@ -9,7 +9,7 @@
 
     <script>
       var FeedMedia = {
-        iframe:        'http://feed-dev',
+        iframe:        'https://developer.feed.fm/',
         defaultToken:  '<?php echo DEFAULT_FEED_TOKEN; ?>',
         defaultSecret: '<?php echo DEFAULT_FEED_SECRET; ?>',
         plugins:       '<?php echo admin_url("plugins.php"); ?>',

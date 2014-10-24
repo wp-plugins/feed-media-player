@@ -3,7 +3,7 @@
 Plugin Name: Music Player by Feed.fm
 Plugin URI: http://feed.fm/
 Description: Enhance your WordPress site with popular music - from Beatles to Daft Punk - in minutes!
-Version: 2.0
+Version: 2.1
 Author: support@feed.fm
 Author URI: http://feed.fm/
 
@@ -16,10 +16,11 @@ History:
   1.4 - SSL all the things!
   1.5 - missing script tag
   2.0 - new onboarding
+  2.1 - oops - build problem
 */
 
 
-define("VERSION", "2.0");
+define("VERSION", "2.1");
 define("DEFAULT_FEED_TOKEN", "c2473cbba8254ac3f2918867d9c94e8f8cedd961");
 define("DEFAULT_FEED_SECRET", "7d56a58e7b62ff5a870120724260eac0bd347e3d");
 
