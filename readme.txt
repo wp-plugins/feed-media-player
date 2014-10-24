@@ -1,47 +1,42 @@
-=== Music Player by Feed.fm ===
+=== Feed Media Player ===
 Contributors: elambrecht
-Tags: music, tunes, radio, stream, audio, feed, media, player
+Tags: music, tunes, radio
 Requires at least: 3.4.2
 Tested up to: 3.4
 Stable tag: trunk
 License: MIT
 License URI: https://github.com/fuzz-radio/FeedMediaPlayer-WordPress/blob/master/feed-media-player/license.txt
 
-Enhance your WordPress site with popular music - from Beatles to Daft Punk - in minutes! 
+This plugin adds a static music player to your Wordpress blog. 
 
 == Description ==
 
-Feed.fm (Music as a Service) provides a legal turn-key API to add popular music to websites, apps, and games 
-n order to drive engagement, retention, and revenues. With the Music Player plugin, you can enhance your
-Wordpress site with music from your own personal collection, or you can select from Feed.fm's wide array
-of expertly curated stations. 
+This plugin adds a static music player to your Wordpress blog. 
 
-The Music Player plugin integrates seamlessly with Wordpress, and comes with a selection of skins to fit the look
-and feel of your site. The player wraps your website so that music keeps playing even as users navigate from
-page to page. Because some more recent browser features are used to make this work (history API, audio API)
-the player only appears on modern browsers.
+The player pulls music from feed.fm, where you can upload the music you want to play
+or you can select music from stations already published on fuzz.com.
 
-Music is a powerful retention, engagement, and branding tool. With a Feed.fm account, you can use our dashboard
-to track session times, return visits, conversions, and more to better understand your audience. An A/B test
-environment is available to find the best music solution for your site.
-
-*note*: Due to licensing restrictions, Feed.fm can only stream music to listeners in the United States.
+The player wraps your website so that as users navigate between pages the music keeps
+playing. Because some more recent browser features are used to make this work (history
+API, audio API) the player only appears on modern browsers.
 
 == Installation ==
 
-1. Install the Music Player via the WordPress.org directory or by uploading the
+1. Install the feed-media-player vis the WordPress.org directory or by uploading the
    feed-media-player.zip to your server.
-1. The plugin will immediately add music to your site upon activation.
-1. Follow the instructions that come up after activating the plugin to create
-   an account on Feed.fm to customize the player and select the music you
-   want it to play.
+1. Register with 'developer.feed.fm' to select the look and feel of your music player
+   and select or upload the music that you want played.
+1. In your wp settings for this plugin, enter the authentication credentials given to
+   you on the 'developer.feed.fm' site.
+1. Activate the plugin.
+1. Rock out!
 
 == Frequently Asked Questions ==
 
 = Is this free? =
 
-Installation is free, but you are charged a fraction of a cent per minute of music playback.
-New accounts on Feed.fm are given free minutes so you can try the service out for no cost.
+You can try this out for free, but then it costs around $25/month for 15,000 minutes of play
+time.
 
 = What music can I play? =
 
@@ -73,9 +68,4 @@ No, the pages in your website look the same to search engines as they always hav
 
 = 1.0 =
 * First version published on wp.org!
-= 1.2 =
-* Rename plugin
-= 1.3 =
-* Add name, phone fields to signup
-= 1.4 =
-* Default all connections to HTTPS
+

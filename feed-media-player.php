@@ -3,7 +3,7 @@
 Plugin Name: Music Player by Feed.fm
 Plugin URI: http://feed.fm/
 Description: Enhance your WordPress site with popular music - from Beatles to Daft Punk - in minutes!
-Version: 1.5
+Version: 2.0
 Author: support@feed.fm
 Author URI: http://feed.fm/
 
@@ -15,20 +15,45 @@ History:
   1.3 - require name and phone number with registration
   1.4 - SSL all the things!
   1.5 - missing script tag
+  2.0 - new onboarding
 */
 
-define("VERSION", "1.5");
+
+define("VERSION", "2.0");
 define("DEFAULT_FEED_TOKEN", "c2473cbba8254ac3f2918867d9c94e8f8cedd961");
 define("DEFAULT_FEED_SECRET", "7d56a58e7b62ff5a870120724260eac0bd347e3d");
 
 add_action('wp_head', 'feed_media_player_header_output', 0);
 add_action('wp_footer', 'feed_media_player_footer_output', 100);
-
-add_action('admin_menu', 'feed_media_player_settings_menu');
-add_action('admin_init', 'feed_media_player_admin_init');
-add_action('admin_notices', 'feed_media_player_admin_notices');
-
 add_action('get_header', 'feed_media_player_header');
+
+//
+//
+// Set up defaults on activation
+//
+//
+
+$feed_default_options =register_activation_hook(__FILE__, 'feed_media_player_activation_hook');
+
+function feed_media_player_activation_hook() {
+  if (get_option('feed_media_player_options') === false) {
+    $new_options =  array(
+      "token" => DEFAULT_FEED_TOKEN,
+      "secret" => DEFAULT_FEED_SECRET,
+      "first_run" => true
+      // email
+      // auth_token
+    );
+
+    add_option('feed_media_player_options', $new_options);
+  }
+}
+
+//
+//
+// Meat of plugin that installs the Feed header script
+//
+//
 
 // start capturing page header info after a 'get_header' call
 function feed_media_player_header($name) {
@@ -58,38 +83,101 @@ function feed_media_player_footer_output() {
   echo '<script>var _paq=_paq||[];!function(){if(window!==window.parent){var a=document.createElement("script"),b=document.getElementsByTagName("script")[0];_paq.push(["setTrackerUrl","https://feed.fm/api/v2/analytics"]),_paq.push(["setSiteId","' . $options['token'] . '"]),_paq.push(["trackPageView"]),a.type="text/javascript",a.defer=!0,a.async=!0,a.src="https://d3qmh30sjudxaa.cloudfront.net/wrap/piwik.js",b.parentNode.insertBefore(a,b)}}();</script>';
 }
 
-register_activation_hook(__FILE__, 'feed_media_player_activation_hook');
+//
+//
+// Configure all the admin menus
+//
+//
 
-function feed_media_player_activation_hook() {
-  if (get_option('feed_media_player_options') === false) {
-    // 'WordPress plugin' app by 'feeddemo'
-    $new_options['token'] = DEFAULT_FEED_TOKEN;
-    $new_options['secret'] = DEFAULT_FEED_SECRET;
-    $new_options['first_run'] = true;
-    add_option('feed_media_player_options', $new_options);
-  }
-}
+add_action('admin_init', 'feed_media_player_admin_init');
+add_action('admin_menu', 'feed_media_player_admin_menus');
+add_action('admin_notices', 'feed_media_player_admin_notices');
 
-// make sure all our options are registered
+
+// set up all admin styles, scripts, and settings
 function feed_media_player_admin_init() {
-  wp_register_script('jquery.validate-1.12.0', 'https://ajax.aspnetcdn.com/ajax/jquery.validate/1.12.0/jquery.validate.js', array('jquery') );
-  wp_register_script('feed-script', 'https://feed.fm/js/wp/feed-without-jquery.js', array('jquery') );
-  wp_register_script('feed-media-admin-script', plugins_url('/script.js', __FILE__ ), array('jquery.validate-1.12.0') );
-  wp_register_style('feed-style', plugins_url('/style.css', __FILE__));
+  wp_register_script('jquery.validate', plugins_url('/jquery.validate.js', __FILE__ ), array('jquery') );
+  wp_register_script('feed-media-json-script', plugins_url('/json2.js', __FILE__ ));
+  wp_register_script('feed-media-config-page-script', plugins_url('/config-page-script.js', __FILE__ ), array( 'jquery.validate', 'feed-media-json-script'));
+
+  wp_register_style('feed-media-config-page-style', plugins_url('/config-page-style.css', __FILE__));
 
   register_setting('feed_media_player_settings', 'feed_media_player_options', 'feed_media_player_validate_options');
+
   add_settings_section('feed_media_player_main_section', 'Authentication Settings', 'feed_media_player_main_setting_section_callback', 'feed_media_player_settings_section');
   add_settings_field('token', 'Token', 'feed_media_player_display_text_field', 'feed_media_player_settings_section', 'feed_media_player_main_section', array('name' => 'token'));
   add_settings_field('secret', 'Secret', 'feed_media_player_display_text_field', 'feed_media_player_settings_section', 'feed_media_player_main_section', array('name' => 'secret'));
 }
 
-// tell the user how to get things started
+// register 'Music Player' menu
+function feed_media_player_admin_menus() {
+  // config-page
+  //$hook = add_menu_page('Music Player Configuration', 'Music Player', 'manage_options', 'feed-media-player/config-page.php');
+  $hook = add_menu_page('Music Player Configuration', 'Music Player', 'manage_options', 'feed-media-player/config-page.php', '', plugins_url( 'images/logo-grey.png', __FILE__ ), '76');
+
+  // prep the proper .js/.css
+  add_action('admin_enqueue_scripts', 'feed_media_player_admin_scripts');
+}
+
+// load up the proper scripts when displaying our pages
+function feed_media_player_admin_scripts($hook) {
+  // config page scripts/styles
+  if ($hook == 'feed-media-player/config-page.php') {
+    wp_enqueue_script('feed-media-config-page-script');
+    wp_enqueue_style('feed-media-config-page-style');
+  }
+}
+
+//
+//
+// Hook to display bouncing logo until the user configures things
+//
+//
+
 function feed_media_player_admin_notices() {
+  $dir = plugin_dir_url(__FILE__);
   if ($options = get_option('feed_media_player_options')) {
-    if ($options['first_run'] === true) { 
+    if (isset($options['first_run']) && ($options['first_run'] === true)) { 
       ?>
+      <script type="text/javascript" >
+
+            //var menuId = jQuery("#toplevel_page_feed-media-player-config-page");
+            var logo = document.createElement('img');
+            var div = document.createElement('div');
+            div.style.position = 'absolute';
+            div.style.right = '-25px';
+            div.style.top = '-5px';
+            div.style.zIndex = 9000;
+            logo.setAttribute('src','<?=$dir?>images/logo-bounce.png');
+            logo.style.marginTop = 0;
+            div.appendChild(logo);
+            bounce(logo);
+            
+            function bounce(elem) {
+                var step = 0;
+                var speed = 0.05;
+                var bounce_height = 20;
+                //console.log("ELEM " + elem);
+            
+                function animate() {
+                    elem.style.marginTop = '-' + (Math.sin(step++*speed)+1)/3*bounce_height + 'px';
+                    //console.log("elem" + elem.style.marginTop);      
+                }
+                
+            id = setInterval(animate, 10);
+                
+            }
+            
+            //console.log(logo);
+            document.getElementById("toplevel_page_feed-media-player-config-page").appendChild(div);
+
+
+      </script>
+      
+        <!-- put the javascript here to animate the bouncing ball -->
+
         <div class='updated' style="overflow: hidden; _overflow: visible; zoom: 1;">
-            <img style="margin: 8px; float: left" src="http://wrap.feed.fm/wrap/logo.png?url=<?php echo urlencode(get_option('home')); ?>">
+            <!-- <img style="margin: 8px; float: left" src="http://wrap.feed.fm/wrap/logo.png?url=<?php echo urlencode(get_option('home')); ?>"> -->
             <div>
               <p>
                 Thanks for installing the Music Player by Feed.fm, which is live on your
@@ -102,128 +190,11 @@ function feed_media_player_admin_notices() {
             </div>
         </div>
       <?php 
-
       unset($options['first_run']);
       update_option('feed_media_player_options', $options);
     }
   }
-
 }
-
-// register sub-menu of 'Settings' menu
-function feed_media_player_settings_menu() {
-  $hook = add_options_page('Music Player Configuration', 'Music Player', 'manage_options', 'feed-media-player', 'feed_media_player_config_page');
-  add_action('admin_print_scripts-' . $hook, 'feed_media_player_print_scripts');
-  add_action('admin_print_styles-' . $hook, 'feed_media_player_print_styles');
-}
-
-function feed_media_player_print_scripts() {
-  wp_enqueue_script('feed-script');
-  wp_enqueue_script('feed-media-admin-script');
-}
-
-function feed_media_player_print_styles() {
-  wp_enqueue_style('feed-style');
-}
-
-// render our settings page
-function feed_media_player_config_page() { ?>
-  <div id="feed_media_player-general" class="wrap">
-    <div id="feed-media-icon" class="icon32"></div>
-    <h2>Music Player Settings</h2>
-
-<?php $options = get_option('feed_media_player_options'); if ($options['token'] === DEFAULT_FEED_TOKEN ) { ?>
-
-    <form id="feed-media-create-account-form" method="post" action="http://developer.feed.fm/account" target="_blank">
-      <div id="poststuff">
-        <div id="post-body" class="metabox-holder columns-2">
-          <div id="post-body-content">
-
-            <div class="postbox">
-              <h3>Sign up with Feed Media!</h3>
-
-              <div class="inside">
-                <p>
-                  Your visitors are currently listening to a demo music station constructed and
-                  managed by Feed.fm.
-                </p>
-                <p>
-                  If you would like to create your own music station or change the styling of the
-                  player, you'll need to create an account with Feed.fm and retrieve your 'token' and
-                  'secret' values that you enter below.
-                </p>
-                <p>
-                  If you have already have an account on Feed.fm, you can log in <a href="http://developer.feed.fm/" target="_blank">here</a>, 
-                  otherwise you can create an account with this form:
-                </p>
-
-                <table class="form-table">
-                  <tbody>
-                    <tr>
-                      <th scope="row">Name</th>
-                      <td>
-                        <input type="text" name="name" class="regular-text">
-                      </td>
-                    </tr>
-                    <tr>
-                      <th scope="row">Phone Number</th>
-                      <td>
-                        <input type="text" name="phone" class="regular-text">
-                      </td>
-                    </tr>
-                    <tr>
-                      <th scope="row">Email address</th>
-                      <td>
-                        <input type="text" name="email_address" value="<?php echo get_option("admin_email"); ?>" class="regular-text">
-                      </td>
-                    </tr>
-                    <tr>
-                      <th scope="row">Desired password:</th>
-                      <td>
-                        <input id="password" type="password" name="password" class="regular-text">
-                      </td>
-                    </tr>
-                    <tr>
-                      <th scope="row">Desired password (again):</th>
-                      <td>
-                        <input type="password" name="password_again" class="regular-text">
-                      </td>
-                    </tr>
-                    <tr>
-                      <td colspan="2">
-                        <label>
-                          <input type="checkbox" name="accept" value="true"> I have read and accept the <a href="https://developer.feed.fm/terms_and_conditions.html">Terms and Conditions</a>.
-                        </label>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td colspan="2">
-                        <input type="hidden" name="source" value="wordpress">
-                        <input type="hidden" name="url" value="<?php echo get_option("home"); ?>">
-                        <input type="submit" value="Create Feed.fm Account" class="button-primary">
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div> <!-- /inside -->
-            </div> <!-- /postbox -->
-          </div> <!-- /post-body-content -->
-        </div> <!-- /post-body -->
-        <br class="clear">
-      </div> <!-- /poststuff -->
-    </form>
-
-<?php } ?>
-
-    <form name="feed_media_player_settings_api" method="post" action="options.php">
-     <?php settings_fields('feed_media_player_settings'); ?>
-     <?php do_settings_sections('feed_media_player_settings_section'); ?>
-     <div id="feed-status">Validating authentication values...</div>
-     <input type="submit" value="Submit" class="button-primary"/>
-    </form>
-  </div>
-  <div class="clear"></div>
-<?php }
 
 function feed_media_player_validate_options($input) {
   $input['version'] = VERSION;
@@ -231,9 +202,9 @@ function feed_media_player_validate_options($input) {
 }
 
 function feed_media_player_main_setting_section_callback() { ?>
-
-  <p>Enter the values given to you on <a href="http://feed.fm/" target="_blank">feed.fm</a></p>
-
+  <p>
+    The values below come from your account on <a href="https://developer.feed.fm/" target="_blank">feed.fm</a>. Log in to change your music selection, player style, or billing information.
+  </p>
 <?php }
 
 function feed_media_player_display_text_field($data = array()) {
@@ -244,4 +215,86 @@ function feed_media_player_display_text_field($data = array()) {
 <?php
 }
 
+//
+//
+// Ajax routines
+//
+//
 
+add_action('wp_ajax_feed_media_account_created', 'feed_media_account_created');
+
+function feed_media_account_created() {
+  header("Content-type: text/json");
+
+  if (empty($_POST['auth_token'])) {
+    echo '{"success":false,"error":{"message":"login token not provided"}}';
+    die();
+  }
+
+  if (empty($_POST['email'])) {
+    echo '{"success":false,"error":{"message":"email not provided"}}';
+    die();
+  }
+
+  $options = get_option('feed_media_player_options');
+
+  if ($options) {
+    $options['email'] = $_POST['email'];
+    $options['auth_token'] = $_POST['auth_token'];
+
+    update_option('feed_media_player_options', $options);
+
+    echo '{"success":true,"options":' . json_encode($options) . '}';
+    die();
+
+  } else {
+    echo '{"success":false,"error":{"message":"no existing options!"}}';
+    die();
+
+  }
+}
+
+add_action('wp_ajax_feed_media_assign_credentials', 'feed_media_assign_credentials');
+
+function feed_media_assign_credentials() {
+  header("Content-type: text/json");
+
+  if (empty($_POST['token'])) {
+    echo '{"success":false,"error":{"message":"token not provided"}}';
+    die();
+  }
+
+  if (empty($_POST['secret'])) {
+    echo '{"success":false,"error":{"message":"secret not provided"}}';
+    die();
+  }
+
+  $options = get_option('feed_media_player_options');
+
+  if ($options) {
+    $options['token'] = $_POST['token'];
+    $options['secret'] = $_POST['secret'];
+
+    update_option('feed_media_player_options', $options);
+
+    echo '{"success":true,"options":' . json_encode($options) . '}';
+    die();
+
+  } else {
+    echo '{"success":false,"error":{"message":"no existing options!"}}';
+    die();
+
+  }
+}
+
+add_action('wp_ajax_feed_media_reset', 'feed_media_reset');
+
+function feed_media_reset() {
+  delete_option('feed_media_player_options');
+
+  feed_media_player_activation_hook();
+
+  header("Content-type: text/json");
+  echo '{"success":true}';
+  die();
+}
